@@ -1,9 +1,9 @@
-console.log("🔥 style.js loaded successfully!");
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js";
+        import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/EffectComposer.js";
+        import { RenderPass } from "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/RenderPass.js";
+        import { UnrealBloomPass } from "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/UnrealBloomPass.js";
 window.addEventListener("DOMContentLoaded", () => {
-  import("https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js").then(THREE => {
-    import("https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/EffectComposer.js").then(async ({ EffectComposer }) => {
-      const { RenderPass } = await import("https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/RenderPass.js");
-      const { UnrealBloomPass } = await import("https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/UnrealBloomPass.js");
+  console.log("🔥 style.js loaded successfully!");
 
       const canvas = document.getElementById("fireworks");
       const scene = new THREE.Scene();
@@ -158,11 +158,9 @@ window.addEventListener("DOMContentLoaded", () => {
       });
 
       window.onresize = () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        composer.setSize(window.innerWidth, window.innerHeight);
-      };
-    });
-  });
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  composer.setSize(window.innerWidth, window.innerHeight);
+};
 });
