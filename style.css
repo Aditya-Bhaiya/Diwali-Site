@@ -1,9 +1,34 @@
 body {
-  margin: 0;
+
+  background: linear-gradient(270deg,
+  #ff9933,
+  #ff4da6,
+  #ffcc33,
+  #ff6600,
+  #800080
+);
+  color: #f4f7fb;
   overflow: hidden;
-  background: radial-gradient(circle at bottom, #000010, #000);
-  font-family: "Poppins", sans-serif;
-  color: white;
+  position: relative;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  animation: rainbowFlow 10s linear infinite;
+}
+
+/* Body Animation */
+@keyframes rainbowFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 canvas {
