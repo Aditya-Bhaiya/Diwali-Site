@@ -1,67 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Diwali Fireworks</title>
-  <link rel="stylesheet" href="./style.css" />
-
-  <!-- ✅ Import map to resolve "three" for GitHub Pages -->
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
-      "three/examples/jsm/postprocessing/EffectComposer.js": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/EffectComposer.js",
-      "three/examples/jsm/postprocessing/RenderPass.js": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/RenderPass.js",
-      "three/examples/jsm/postprocessing/UnrealBloomPass.js": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/UnrealBloomPass.js"
-    }
-  }
-  </script>
-
-  <!-- ✅ Module script for main code -->
-  <script type="module" src="./style.js"></script>
+  <title>🎆 Happy Diwali 🎇</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
+  <!-- Canvas -->
   <canvas id="fireworks"></canvas>
 
-  <!-- UI top-left (small) -->
-  <div id="ui">
-    <h1>🎆 Diwali Fireworks</h1>
-    <div class="controls">
-      <button id="launchBtn">Launch</button>
-      <button id="muteBtn">🔊</button>
-    </div>
-    <div class="helper">Tap to launch manually</div>
-  </div>
-
-
-  <div id="ui2">
-    <ul>
-      <li><a href="crackers.html">💥 <span>Crackers</span></a></li>
-      <li><a href="about.html">ℹ️ <span>About</span></a></li>
-    </ul>
-  </div>
-
-  <!-- Name overlay (mobile friendly) -->
+  <!-- Name overlay -->
   <div id="nameOverlay">
-    <div class="card">
-      <h2>Happy Diwali! 👋</h2>
-      <p>Enter your name to light fireworks for every letter:</p>
-      <input id="nameInput" type="text" inputmode="text" placeholder="Type your name..." autofocus />
-      <div class="row">
-        <button id="startBtn" class="primary">Start</button>
-        <button id="enableSoundBtn" class="secondary">Enable Sound</button>
-      </div>
-      <small class="tip">Tap anywhere to focus input. Press Enter to start.</small>
-    </div>
+    <h2>🎇 Enter your name to begin 🎇</h2>
+    <input id="nameInput" placeholder="Your Name..." />
+    <button id="startBtn">Start Fireworks 🎆</button>
   </div>
 
-  <!-- Center message that appears after show -->
-  <div id="finalMessage" class="hidden">
-    <div id="finalText"></div>
+  <!-- Final Message -->
+  <div id="finalMessage">
+    <h1 id="finalText"></h1>
   </div>
+
+  <!-- Load script -->
+  <script type="module" src="./style.js"></script>
 </body>
-
 </html>
