@@ -1,6 +1,5 @@
 // =======================================================
-// 🎇 Diwali Fireworks — Final Working Version (2025)
-// Made for GitHub Pages + Mobile Support + Boom Sound
+// 🎆 Final Diwali Fireworks (Auto + Sound + Replay)
 // =======================================================
 
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js";
@@ -8,7 +7,6 @@ import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.161.0/examp
 import { RenderPass } from "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/UnrealBloomPass.js";
 
-// ---- SETUP ----
 const canvas = document.getElementById("fireworks");
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -21,7 +19,7 @@ renderer.setClearColor(0x000000, 0);
 
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
-composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.4, 0.4, 0.85));
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85));
 
 // ---- AUDIO ----
 const listener = new THREE.AudioListener();
@@ -33,7 +31,7 @@ function loadSound(key, url) {
   const s = new THREE.Audio(listener);
   soundLoader.load(url, (buf) => {
     s.setBuffer(buf);
-    s.setVolume(0.8);
+    s.setVolume(0.9);
   });
   sounds[key] = s;
 }
@@ -44,13 +42,12 @@ loadSound("crackle", "https://cdn.pixabay.com/download/audio/2023/05/22/audio_51
 
 const audioContext = listener.context;
 
-// resume audio context on any user touch/click
-document.addEventListener("click", () => {
+// Resume sound on any gesture
+const resumeAudio = () => {
   if (audioContext.state === "suspended") audioContext.resume();
-});
-document.addEventListener("touchstart", () => {
-  if (audioContext.state === "suspended") audioContext.resume();
-});
+};
+document.addEventListener("click", resumeAudio);
+document.addEventListener("touchstart", resumeAudio);
 
 // ---- FIREWORKS ----
 const fireworks = [];
@@ -61,7 +58,7 @@ function createFirework({ x = (Math.random() - 0.5) * 60, z = (Math.random() - 0
   const rocket = new THREE.Mesh(new THREE.SphereGeometry(0.45, 8, 8), new THREE.MeshBasicMaterial({ color: color || 0xfff0aa }));
   group.add(rocket);
 
-  const count = 120 + Math.random() * 120;
+  const count = 140 + Math.random() * 100;
   const pos = new Float32Array(count * 3);
   const col = new Float32Array(count * 3);
   for (let i = 0; i < count; i++) {
@@ -78,18 +75,10 @@ function createFirework({ x = (Math.random() - 0.5) * 60, z = (Math.random() - 0
   const geom = new THREE.BufferGeometry();
   geom.setAttribute("position", new THREE.BufferAttribute(pos, 3));
   geom.setAttribute("color", new THREE.BufferAttribute(col, 3));
-
   const pts = new THREE.Points(
     geom,
-    new THREE.PointsMaterial({
-      size: 0.45,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.95,
-      blending: THREE.AdditiveBlending,
-    })
+    new THREE.PointsMaterial({ size: 0.45, vertexColors: true, transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending })
   );
-
   pts.visible = false;
   group.add(pts);
 
@@ -113,7 +102,6 @@ function createFirework({ x = (Math.random() - 0.5) * 60, z = (Math.random() - 0
 function animate() {
   requestAnimationFrame(animate);
   const dt = clock.getDelta();
-
   for (let i = fireworks.length - 1; i >= 0; i--) {
     const g = fireworks[i];
     const d = g.userData;
@@ -157,55 +145,20 @@ function animate() {
       }
     }
   }
-
   composer.render();
 }
 animate();
 
-// ---- UI Elements ----
+// ---- UI ----
 const overlay = document.getElementById("nameOverlay");
 const input = document.getElementById("nameInput");
 const startBtn = document.getElementById("startBtn");
-const enableSoundBtn = document.getElementById("enableSoundBtn");
-const launchBtn = document.getElementById("launchBtn");
-const muteBtn = document.getElementById("muteBtn");
 const finalMessage = document.getElementById("finalMessage");
 const finalText = document.getElementById("finalText");
 
-let muted = false;
-
-muteBtn.onclick = () => {
-  muted = !muted;
-  Object.values(sounds).forEach((s) => {
-    try {
-      s.setVolume(muted ? 0 : 0.8);
-    } catch {}
-  });
-  muteBtn.textContent = muted ? "🔈" : "🔊";
-};
-
-enableSoundBtn.onclick = async () => {
-  try {
-    await listener.context.resume();
-  } catch {}
-  enableSoundBtn.textContent = "Sound Enabled";
-  enableSoundBtn.disabled = true;
-};
-
-input.onkeydown = (e) => {
-  if (e.key === "Enter") startSequence(input.value);
-};
-startBtn.onclick = () => startSequence(input.value);
-overlay.onclick = (e) => {
-  if (e.target === overlay) input.focus();
-};
-launchBtn.onclick = () => createFirework();
-
-// ---- MAIN SEQUENCE ----
 function startSequence(nameRaw) {
   const name = (nameRaw || "Friend").trim();
   if (name.length === 0) return;
-
   overlay.classList.add("hidden");
   try {
     listener.context.resume();
@@ -230,9 +183,29 @@ function startSequence(nameRaw) {
     } catch {}
     finalText.textContent = `🎆 Happy Diwali, ${name}! 🎇`;
     finalMessage.classList.add("show");
-    setTimeout(() => finalMessage.classList.remove("show"), 6000);
   }, clean.length * baseDelay + 1800);
 }
+
+// Replay button logic
+const replayBtn = document.createElement("button");
+replayBtn.textContent = "🎇 Replay Fireworks";
+replayBtn.style.position = "fixed";
+replayBtn.style.bottom = "30px";
+replayBtn.style.left = "50%";
+replayBtn.style.transform = "translateX(-50%)";
+replayBtn.style.padding = "12px 20px";
+replayBtn.style.fontSize = "18px";
+replayBtn.style.border = "none";
+replayBtn.style.borderRadius = "10px";
+replayBtn.style.cursor = "pointer";
+replayBtn.style.background = "#ffb84d";
+replayBtn.style.color = "#000";
+replayBtn.style.zIndex = "999";
+document.body.appendChild(replayBtn);
+replayBtn.onclick = () => {
+  startSequence("Aditya");
+  finalMessage.classList.remove("show");
+};
 
 // ---- RESPONSIVE ----
 window.onresize = () => {
@@ -242,7 +215,26 @@ window.onresize = () => {
   composer.setSize(window.innerWidth, window.innerHeight);
 };
 
-// ---- AUTO START ----
+// ---- AUTO START AFTER TAP ----
 window.onload = () => {
-  setTimeout(() => startSequence("Aditya"), 1200);
+  const tapText = document.createElement("div");
+  tapText.textContent = "👉 Tap anywhere to start fireworks!";
+  tapText.style.position = "fixed";
+  tapText.style.top = "50%";
+  tapText.style.left = "50%";
+  tapText.style.transform = "translate(-50%, -50%)";
+  tapText.style.color = "white";
+  tapText.style.fontSize = "22px";
+  tapText.style.textShadow = "0 0 10px #ffb84d";
+  tapText.style.zIndex = "1000";
+  document.body.appendChild(tapText);
+
+  const startOnce = () => {
+    tapText.remove();
+    document.removeEventListener("click", startOnce);
+    document.removeEventListener("touchstart", startOnce);
+    startSequence("Aditya");
+  };
+  document.addEventListener("click", startOnce);
+  document.addEventListener("touchstart", startOnce);
 };
