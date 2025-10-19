@@ -1,12 +1,14 @@
 console.log("🔥 style.js loaded successfully!");
 
-// ✅ Correct imports
+// ✅ Import Three.js modules from CDN
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js";
 import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/UnrealBloomPass.js";
 
-// === SETUP ===
+// =======================================================
+// ⚙️ SCENE SETUP
+// =======================================================
 const canvas = document.getElementById("fireworks");
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -24,16 +26,18 @@ composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window
 const fireworks = [];
 const clock = new THREE.Clock();
 
-// === FIREWORKS ===
-function createFirework({ x = (Math.random() - 0.5) * 60, z = (Math.random() - 0.5) * 30, color } = {}) {
+// =======================================================
+// 🎇 FIREWORK CREATION
+// =======================================================
+function createFirework({ x = 0, z = 0, color = 0xffb84d } = {}) {
   const group = new THREE.Group();
   const rocket = new THREE.Mesh(
-    new THREE.SphereGeometry(0.45, 8, 8),
-    new THREE.MeshBasicMaterial({ color: color || 0xfff0aa })
+    new THREE.SphereGeometry(0.5, 8, 8),
+    new THREE.MeshBasicMaterial({ color })
   );
   group.add(rocket);
 
-  const count = 130 + Math.random() * 80;
+  const count = 150;
   const pos = new Float32Array(count * 3);
   const col = new Float32Array(count * 3);
   for (let i = 0; i < count; i++) {
@@ -53,7 +57,7 @@ function createFirework({ x = (Math.random() - 0.5) * 60, z = (Math.random() - 0
   const pts = new THREE.Points(
     geom,
     new THREE.PointsMaterial({
-      size: 0.45,
+      size: 0.5,
       vertexColors: true,
       transparent: true,
       opacity: 0.95,
@@ -67,7 +71,7 @@ function createFirework({ x = (Math.random() - 0.5) * 60, z = (Math.random() - 0
     rocket,
     pts,
     exploded: false,
-    vel: new THREE.Vector3((Math.random() - 0.5) * 6, 40 + Math.random() * 10, (Math.random() - 0.5) * 4),
+    vel: new THREE.Vector3((Math.random() - 0.5) * 4, 35 + Math.random() * 8, (Math.random() - 0.5) * 3),
   };
 
   group.position.set(x, -30, z);
@@ -75,22 +79,26 @@ function createFirework({ x = (Math.random() - 0.5) * 60, z = (Math.random() - 0
   fireworks.push(group);
 }
 
-// === ANIMATION ===
+// =======================================================
+// 🔁 ANIMATION LOOP
+// =======================================================
 function animate() {
   requestAnimationFrame(animate);
   const dt = clock.getDelta();
+
   for (let i = fireworks.length - 1; i >= 0; i--) {
     const g = fireworks[i];
     const d = g.userData;
 
     if (!d.exploded) {
-      d.vel.y -= 28 * dt;
+      d.vel.y -= 25 * dt;
       g.position.addScaledVector(d.vel, dt);
 
       if (d.vel.y <= 0) {
         d.exploded = true;
         g.remove(d.rocket);
         d.pts.visible = true;
+
         const c = d.pts.geometry.attributes.position.count;
         d.pv = Array.from({ length: c }, () => ({
           x: (Math.random() - 0.5) * 40,
@@ -106,18 +114,21 @@ function animate() {
         p[j * 3 + 2] += d.pv[j].z * dt;
       }
       d.pts.geometry.attributes.position.needsUpdate = true;
-      d.pts.material.opacity -= dt * 0.8;
+      d.pts.material.opacity -= dt * 0.7;
       if (d.pts.material.opacity <= 0) {
         scene.remove(g);
         fireworks.splice(i, 1);
       }
     }
   }
+
   composer.render();
 }
 animate();
 
-// === NAME INPUT ===
+// =======================================================
+// 🧍 NAME INPUT LOGIC
+// =======================================================
 const overlay = document.getElementById("nameOverlay");
 const input = document.getElementById("nameInput");
 const startBtn = document.getElementById("startBtn");
@@ -131,27 +142,29 @@ function startSequence(nameRaw) {
   overlay.classList.add("hidden");
 
   const clean = name.replace(/\s+/g, "");
-  const baseDelay = 350;
+  const baseDelay = 400;
   const colors = [0xffb84d, 0xff4d6d, 0x7afcff, 0xa6ff7a, 0xd69bff];
 
   for (let i = 0; i < clean.length; i++) {
     setTimeout(() => {
       const span = Math.max(40, Math.min(80, clean.length * 6));
-      const x = (i / (clean.length - 1) - 0.5) * span + (Math.random() - 0.5) * 6;
-      const z = (Math.random() - 0.5) * 24;
-      createFirework({ x, z, color: colors[i % colors.length] });
+      const x = (i / (clean.length - 1) - 0.5) * span;
+      createFirework({ x, z: (Math.random() - 0.5) * 20, color: colors[i % colors.length] });
     }, i * baseDelay);
   }
 
   setTimeout(() => {
     finalText.textContent = `🎆 Happy Diwali, ${name}! 🎇`;
     finalMessage.classList.add("show");
-  }, clean.length * baseDelay + 1800);
+  }, clean.length * baseDelay + 2000);
 }
 
 startBtn.addEventListener("click", () => {
   const name = input.value.trim();
-  if (!name) return alert("Please enter your name!");
+  if (!name) {
+    alert("Please enter your name!");
+    return;
+  }
   startSequence(name);
 });
 
@@ -159,9 +172,9 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") startBtn.click();
 });
 
-window.onresize = () => {
+window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
   composer.setSize(window.innerWidth, window.innerHeight);
-};
+});
