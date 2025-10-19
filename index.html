@@ -1,23 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Diwali Fireworks 3D</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Diwali Fireworks — Mobile</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <canvas id="fireworks"></canvas>
-  <div id="ui">
-    <h1>🎆 Diwali Fireworks 3D</h1>
-    <button id="launchBtn">Launch Firework</button>
-    <button id="muteBtn">🔊</button>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/EffectComposer.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/RenderPass.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/UnrealBloomPass.js"></script>
-  <script type="module" src="style.js"></script>
 
+  <!-- UI top-left (small) -->
+  <div id="ui">
+    <h1>🎆 Diwali Fireworks</h1>
+    <div class="controls">
+      <button id="launchBtn">Launch</button>
+      <button id="muteBtn">🔊</button>
+    </div>
+    <div class="helper">Tap to launch manually</div>
+  </div>
+
+  <!-- Name overlay (mobile friendly) -->
+  <div id="nameOverlay">
+    <div class="card">
+      <h2>Happy Diwali! 👋</h2>
+      <p>Enter your name to light fireworks for every letter:</p>
+      <input id="nameInput" type="text" inputmode="text" placeholder="Type your name..." autofocus />
+      <div class="row">
+        <button id="startBtn" class="primary">Start</button>
+        <button id="enableSoundBtn" class="secondary">Enable Sound</button>
+      </div>
+      <small class="tip">Tap anywhere to focus input. Press Enter to start.</small>
+    </div>
+  </div>
+
+  <!-- Center message that appears after show -->
+  <div id="finalMessage" class="hidden">
+    <div id="finalText"></div>
+  </div>
+
+  <script type="module" src="style.js"></script>
 </body>
 </html>

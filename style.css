@@ -1,32 +1,28 @@
-/* style.css — Diwali Fireworks 3D styling
-   - Fullscreen Three.js canvas
-   - Centered UI panel with Launch, Mute
-   - Subtle night gradient + vignette for atmosphere
-*/
-
 :root{
   --bg-top: #02030a;
   --bg-bottom: #020611;
   --accent: #ffb84d;
   --muted: #9aa4b2;
   --glass: rgba(255,255,255,0.04);
-  --glass-2: rgba(255,255,255,0.02);
-  --panel-blur: 8px;
   --ui-z: 9999;
-  --font-stack: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-stack: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
 }
 
+/* base */
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;width:100%;font-family:var(--font-stack);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+html,body{height:100%;width:100%;font-family:var(--font-stack);-webkit-font-smoothing:antialiased}
 body{
   background: radial-gradient(800px 400px at 18% 8%, rgba(255,160,60,0.02), transparent),
               linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 70%);
   color:#f4f7fb;
   overflow:hidden;
   position:relative;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-/* Fullscreen WebGL canvas */
+/* canvas */
 canvas#fireworks{
   display:block;
   position:fixed;
@@ -35,43 +31,32 @@ canvas#fireworks{
   height:100%;
   z-index:1;
   background: transparent;
+  touch-action: manipulation;
 }
 
-/* UI container */
+/* small UI */
 #ui{
   position:fixed;
   z-index:var(--ui-z);
-  top:28px;
-  left:28px;
+  top:18px;
+  left:12px;
   display:flex;
   flex-direction:column;
-  gap:12px;
-  align-items:flex-start;
-  backdrop-filter: blur(var(--panel-blur)) saturate(1.05);
-  -webkit-backdrop-filter: blur(var(--panel-blur)) saturate(1.05);
-  background: linear-gradient(180deg, rgba(6,8,12,0.36), rgba(6,8,12,0.24));
-  border:1px solid rgba(255,255,255,0.04);
-  padding:12px;
-  border-radius:12px;
-  box-shadow: 0 18px 60px rgba(2,6,20,0.6);
-  min-width:170px;
-}
-
-/* Title / heading */
-#ui h1{
-  font-size:16px;
-  margin:0;
-  font-weight:700;
-  letter-spacing:0.2px;
-  display:flex;
   gap:8px;
-  align-items:center;
+  align-items:flex-start;
+  padding:10px;
+  border-radius:10px;
+  backdrop-filter: blur(6px);
+  background: linear-gradient(180deg, rgba(6,8,12,0.36), rgba(6,8,12,0.24));
+  border:1px solid rgba(255,255,255,0.03);
+  min-width:140px;
 }
 
-/* Controls row */
-.controls{display:flex;gap:8px;align-items:center}
+/* text */
+#ui h1{font-size:14px;margin:0;font-weight:700}
+.helper{font-size:12px;color:var(--muted);margin-top:4px}
 
-/* Buttons */
+/* buttons */
 button{
   border:0;
   background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
@@ -79,83 +64,54 @@ button{
   padding:10px 12px;
   border-radius:10px;
   cursor:pointer;
-  font-weight:600;
-  font-size:13px;
-  transition: transform 140ms ease, box-shadow 160ms ease;
-  box-shadow: 0 8px 18px rgba(3,8,20,0.45);
+  font-weight:700;
+  font-size:14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
 }
-button:hover{ transform: translateY(-3px); box-shadow: 0 18px 42px rgba(3,8,20,0.6); }
-button:active{ transform: translateY(0) scale(0.995); }
+button.primary{background: linear-gradient(90deg,#ffb84d,#ff7b2a); color:#071017}
+button.secondary{background: rgba(255,255,255,0.04)}
+button:active{transform:translateY(1px)}
 
-/* Primary launch button */
-#launchBtn{
-  background: linear-gradient(90deg, #ffb84d, #ff7b2a);
-  color: #071017;
-  padding:12px 18px;
-  border-radius:12px;
-  font-size:15px;
+/* name overlay (full screen) */
+#nameOverlay{
+  position:fixed; inset:0; z-index:10000;
+  display:flex; align-items:center; justify-content:center;
+  background: linear-gradient(180deg, rgba(0,0,0,0.65), rgba(0,0,0,0.7));
+  padding:20px;
 }
-
-/* Secondary small buttons */
-#muteBtn, #debugBtn{
-  padding:8px 10px;
-  background:var(--glass);
-  color:var(--muted);
-  border-radius:10px;
+#nameOverlay .card{
+  width:100%; max-width:420px; border-radius:14px; padding:18px;
+  background: linear-gradient(180deg, rgba(6,8,12,0.85), rgba(8,10,14,0.75));
+  border:1px solid rgba(255,255,255,0.04);
+  text-align:center;
 }
-
-/* Small helper text */
-.helper{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:4px;
+#nameOverlay h2{margin-bottom:6px}
+#nameOverlay p{color:var(--muted);font-size:14px;margin-bottom:12px}
+#nameInput{
+  width:100%; padding:12px 14px; font-size:16px; border-radius:10px; border:0;
+  margin-bottom:12px; background: rgba(255,255,255,0.02); color: #fff;
 }
+#nameOverlay .row{display:flex; gap:10px; justify-content:center}
+#nameOverlay .tip{display:block;margin-top:8px;color:var(--muted);font-size:12px}
 
-/* Bottom-right quick info / credit */
-.info{
-  position:fixed;
-  z-index:var(--ui-z);
-  right:18px;
-  bottom:18px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border:1px solid rgba(255,255,255,0.03);
-  padding:10px 12px;
-  border-radius:10px;
-  font-size:12px;
-  color:var(--muted);
-  backdrop-filter: blur(6px);
-  box-shadow: 0 12px 48px rgba(2,6,20,0.6);
+/* final message */
+#finalMessage{
+  position:fixed; inset:0; z-index:10005; display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
 }
-
-/* Make UI responsive on smaller viewports */
-@media (max-width:720px){
-  #ui{ top:14px; left:14px; min-width:150px; gap:8px; padding:10px; }
-  #launchBtn{ padding:10px 12px; font-size:14px; }
-  .info{ right:10px; bottom:10px; font-size:11px; padding:8px 10px; }
+#finalText{
+  font-size:28px; font-weight:800; color:#fff; text-align:center;
+  background: linear-gradient(90deg,#ffd17a,#ff7b2a);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  text-shadow: 0 6px 30px rgba(255,120,35,0.12);
+  transform: scale(0.9); opacity:0; transition: transform 700ms cubic-bezier(.2,.8,.2,1), opacity 700ms;
 }
+#finalMessage.show #finalText{ transform: scale(1); opacity:1 }
 
-/* Small accessibility focus style */
-button:focus{ outline: 3px solid rgba(255,150,30,0.14); outline-offset:3px; border-radius:10px; }
-
-/* Optional: a subtle top-left diya icon */
-#ui .diya{
-  font-size:20px;
-  transform:translateY(1px);
+/* responsive tweaks for small phones */
+@media (max-width:420px){
+  #nameOverlay .card{ padding:14px }
+  #finalText{ font-size:22px }
+  button{ padding:10px 10px; font-size:15px }
 }
-
-/* Optional "tap to enable sound" overlay (hidden by default) */
-#tapToEnable{
-  position:fixed; inset:0; z-index:10010; display:flex; align-items:center; justify-content:center;
-  background: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.6));
-  color:#fff; font-size:16px; text-align:center; padding:20px;
-}
-#tapToEnable .btn{ margin-top:12px; }
-#tapToEnable.hidden{ display:none; }
-
-/* tiny performance hint (shown only for debug) */
-.performance {
-  font-size:12px;
-  color:var(--muted);
-  margin-top:6px;
-  display:block;
-}
+.hidden{ display:none !important }
