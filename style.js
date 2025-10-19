@@ -186,3 +186,35 @@ window.onresize = () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
   composer.setSize(window.innerWidth, window.innerHeight);
 };
+
+// ---- REPLAY BUTTON ----
+const replayBtn = document.createElement("button");
+replayBtn.textContent = "🎇 Replay Fireworks";
+replayBtn.style.position = "fixed";
+replayBtn.style.bottom = "40px";
+replayBtn.style.left = "50%";
+replayBtn.style.transform = "translateX(-50%)";
+replayBtn.style.padding = "10px 20px";
+replayBtn.style.fontSize = "1.1rem";
+replayBtn.style.border = "none";
+replayBtn.style.borderRadius = "10px";
+replayBtn.style.cursor = "pointer";
+replayBtn.style.background = "linear-gradient(90deg, #ffb84d, #ff4d6d)";
+replayBtn.style.color = "#000";
+replayBtn.style.display = "none";
+replayBtn.style.zIndex = "999";
+document.body.appendChild(replayBtn);
+
+replayBtn.onclick = () => {
+  finalMessage.classList.remove("show");
+  const name = input.value.trim() || "Friend";
+  setTimeout(() => startSequence(name), 600);
+};
+
+// Show button after text
+const observer = new MutationObserver(() => {
+  if (finalMessage.classList.contains("show")) {
+    replayBtn.style.display = "block";
+  }
+});
+observer.observe(finalMessage, { attributes: true });
