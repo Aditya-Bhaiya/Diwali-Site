@@ -1,44 +1,16 @@
-:root {
-  --bg-top: #02030a;
-  --bg-bottom: #020611;
-  --accent: #ffb84d;
-  --muted: #9aa4b2;
-  --glass: rgba(255, 255, 255, 0.04);
-  --ui-z: 9999;
-  --font-stack: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-}
-
-/* base */
-* {
-  box-sizing: border-box;
+body {
   margin: 0;
-  padding: 0
-}
-
-html,
-body {
-  height: 100%;
-  width: 100%;
-  font-family: var(--font-stack);
-  -webkit-font-smoothing: antialiased
-}
-
-body {
-  background: radial-gradient(800px 400px at 18% 8%, rgba(255, 160, 60, 0.02), transparent),
-    linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 70%);
-  color: #f4f7fb;
   overflow: hidden;
-  position: relative;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
+  background: radial-gradient(circle at bottom, #000010, #000);
+  font-family: "Poppins", sans-serif;
+  color: white;
 }
 
-/* canvas */
-canvas#fireworks {
-  display: block;
+/* Canvas */
+#fireworks {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: 1;
@@ -174,105 +146,87 @@ button:active {
 #nameOverlay {
   position: fixed;
   inset: 0;
-  z-index: 10000;
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.7));
-  padding: 20px;
-}
-
-#nameOverlay .card {
-  width: 100%;
-  max-width: 420px;
-  border-radius: 14px;
-  padding: 18px;
-  background: linear-gradient(180deg, rgba(6, 8, 12, 0.85), rgba(8, 10, 14, 0.75));
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  gap: 15px;
+  z-index: 100;
   text-align: center;
+  backdrop-filter: blur(6px);
 }
 
 #nameOverlay h2 {
-  margin-bottom: 6px
-}
-
-#nameOverlay p {
-  color: var(--muted);
-  font-size: 14px;
-  margin-bottom: 12px
+  font-size: 1.6rem;
+  text-shadow: 0 0 15px #ffb84d;
 }
 
 #nameInput {
-  width: 100%;
-  padding: 12px 14px;
-  font-size: 16px;
+  padding: 10px 16px;
+  border: none;
   border-radius: 10px;
-  border: 0;
-  margin-bottom: 12px;
-  background: rgba(255, 255, 255, 0.02);
-  color: #fff;
+  font-size: 1.1rem;
+  text-align: center;
+  outline: none;
 }
 
-#nameOverlay .row {
-  display: flex;
-  gap: 10px;
-  justify-content: center
+#startBtn {
+  background: linear-gradient(90deg, #ffb84d, #ff4d6d);
+  border: none;
+  color: #000;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+#startBtn:hover {
+  transform: scale(1.05);
 }
 
-#nameOverlay .tip {
-  display: block;
-  margin-top: 8px;
-  color: var(--muted);
-  font-size: 12px
+/* Hide overlay after name entered */
+.hidden {
+  display: none;
 }
 
-/* final message */
+/* Final Message */
 #finalMessage {
   position: fixed;
-  inset: 0;
-  z-index: 10005;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 90;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+}
+
+#finalMessage.show {
+  opacity: 1;
 }
 
 #finalText {
-  font-size: 28px;
-  font-weight: 800;
-  color: #fff;
-  text-align: center;
-  background: linear-gradient(90deg, #ffd17a, #ff7b2a);
-  -webkit-background-clip: text;
+  font-size: 2.2rem;
+  animation: glowText 3s linear infinite;
+  background: linear-gradient(90deg, #ff4d6d, #ffb84d, #7afcff, #a6ff7a, #d69bff);
   background-clip: text;
-  color: transparent;
-  text-shadow: 0 6px 30px rgba(255, 120, 35, 0.12);
-  transform: scale(0.9);
-  opacity: 0;
-  transition: transform 700ms cubic-bezier(.2, .8, .2, 1), opacity 700ms;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+/* Glowing animation */
+@keyframes glowText {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
 }
 
 #finalMessage.show #finalText {
-  transform: scale(1);
-  opacity: 1
-}
-
-/* responsive tweaks for small phones */
-@media (max-width:420px) {
-  #nameOverlay .card {
-    padding: 14px
-  }
-
-  #finalText {
-    font-size: 22px
-  }
-
-  button {
-    padding: 10px 10px;
-    font-size: 15px
-  }
-}
-
-.hidden {
-  display: none !important
+  animation: glowText 3s linear infinite;
+  filter: drop-shadow(0 0 10px #ffb84d) drop-shadow(0 0 25px #ff4d6d);
 }
