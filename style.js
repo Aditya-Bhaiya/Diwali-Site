@@ -96,7 +96,7 @@ function createFirework({ x = (Math.random() - 0.5) * 60, z = (Math.random() - 0
 
   try {
     sounds.launch?.play();
-  } catch {}
+  } catch { }
 }
 
 function animate() {
@@ -117,11 +117,11 @@ function animate() {
         d.pts.visible = true;
         try {
           sounds.boom?.play();
-        } catch {}
+        } catch { }
         setTimeout(() => {
           try {
             sounds.crackle?.play();
-          } catch {}
+          } catch { }
         }, 200);
         const c = d.pts.geometry.attributes.position.count;
         d.pv = Array.from({ length: c }, () => ({
@@ -162,7 +162,7 @@ function startSequence(nameRaw) {
   overlay.classList.add("hidden");
   try {
     listener.context.resume();
-  } catch {}
+  } catch { }
 
   const clean = name.replace(/\s+/g, "");
   const baseDelay = 350;
@@ -180,7 +180,7 @@ function startSequence(nameRaw) {
   setTimeout(() => {
     try {
       sounds.boom?.play();
-    } catch {}
+    } catch { }
     finalText.textContent = `🎆 Happy Diwali, ${name}! 🎇`;
     finalMessage.classList.add("show");
   }, clean.length * baseDelay + 1800);
