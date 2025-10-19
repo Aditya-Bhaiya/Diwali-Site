@@ -1,3 +1,4 @@
+console.log("🔥 style.js loaded successfully!");
 window.addEventListener("DOMContentLoaded", () => {
   import("https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js").then(THREE => {
     import("https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/EffectComposer.js").then(async ({ EffectComposer }) => {
