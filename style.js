@@ -1,5 +1,5 @@
 // =======================================================
-// 🎆 Final Diwali Fireworks — Name Input + Sound Fix (100%)
+// 🎇 Final Diwali Fireworks (Name Entry + Responsive)
 // =======================================================
 
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js";
@@ -7,6 +7,7 @@ import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.161.0/examp
 import { RenderPass } from "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/UnrealBloomPass.js";
 
+// ---- SCENE SETUP ----
 const canvas = document.getElementById("fireworks");
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -21,31 +22,24 @@ const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.4, 0.4, 0.85));
 
-// ---- AUDIO ----
-const listener = new THREE.AudioListener();
-camera.add(listener);
-const soundLoader = new THREE.AudioLoader();
-const sounds = {};
+// ---- AUDIO (optional) ----
+// const listener = new THREE.AudioListener();
+// camera.add(listener);
+// const soundLoader = new THREE.AudioLoader();
+// const sounds = {};
+// function loadSound(key, url) {
+//   const s = new THREE.Audio(listener);
+//   soundLoader.load(url, (buf) => {
+//     s.setBuffer(buf);
+//     s.setVolume(0.9);
+//   });
+//   sounds[key] = s;
+// }
+// loadSound("launch", "sounds/launch.mp3");
+// loadSound("boom", "sounds/boom.mp3");
+// loadSound("crackle", "sounds/crackle.mp3");
 
-function loadSound(key, url) {
-  const s = new THREE.Audio(listener);
-  soundLoader.load(url, (buf) => {
-    s.setBuffer(buf);
-    s.setVolume(0.9);
-  });
-  sounds[key] = s;
-}
-
-loadSound("launch", "https://cdn.pixabay.com/download/audio/2023/08/29/audio_6a0fa44a09.mp3?filename=rocket-launch-183711.mp3");
-loadSound("boom", "https://cdn.pixabay.com/download/audio/2022/03/15/audio_15df32126e.mp3?filename=firework-large-explosion-1-6952.mp3");
-loadSound("crackle", "https://cdn.pixabay.com/download/audio/2023/05/22/audio_513f8f7b3d.mp3?filename=firework-crackle-14659.mp3");
-
-const audioContext = listener.context;
-const resumeAudio = () => {
-  if (audioContext.state === "suspended") audioContext.resume();
-};
-
-// ---- FIREWORKS ----
+// ---- FIREWORK LOGIC ----
 const fireworks = [];
 const clock = new THREE.Clock();
 
@@ -90,9 +84,7 @@ function createFirework({ x = (Math.random() - 0.5) * 60, z = (Math.random() - 0
   scene.add(group);
   fireworks.push(group);
 
-  try {
-    sounds.launch?.play();
-  } catch {}
+  // try { sounds.launch?.play(); } catch {}
 }
 
 function animate() {
@@ -111,13 +103,9 @@ function animate() {
         d.exploded = true;
         g.remove(d.rocket);
         d.pts.visible = true;
-        try {
-          sounds.boom?.play();
-        } catch {}
+        // try { sounds.boom?.play(); } catch {}
         setTimeout(() => {
-          try {
-            sounds.crackle?.play();
-          } catch {}
+          // try { sounds.crackle?.play(); } catch {}
         }, 200);
         const c = d.pts.geometry.attributes.position.count;
         d.pv = Array.from({ length: c }, () => ({
@@ -145,7 +133,7 @@ function animate() {
 }
 animate();
 
-// ---- NAME INPUT ----
+// ---- NAME LOGIC ----
 const overlay = document.getElementById("nameOverlay");
 const input = document.getElementById("nameInput");
 const startBtn = document.getElementById("startBtn");
@@ -155,8 +143,8 @@ const finalText = document.getElementById("finalText");
 function startSequence(nameRaw) {
   const name = (nameRaw || "Friend").trim();
   if (name.length === 0) return;
+
   overlay.classList.add("hidden");
-  resumeAudio();
 
   const clean = name.replace(/\s+/g, "");
   const baseDelay = 350;
@@ -172,16 +160,18 @@ function startSequence(nameRaw) {
   }
 
   setTimeout(() => {
-    sounds.boom?.play();
     finalText.textContent = `🎆 Happy Diwali, ${name}! 🎇`;
     finalMessage.classList.add("show");
   }, clean.length * baseDelay + 1800);
 }
 
-// ---- BUTTON HANDLER ----
+// ---- START BUTTON ----
 startBtn.addEventListener("click", () => {
   const name = input.value.trim();
-  if (!name) return alert("Please enter your name first!");
+  if (!name) {
+    alert("Please enter your name first!");
+    return;
+  }
   startSequence(name);
 });
 
