@@ -3,7 +3,6 @@ import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.161.0/examp
 import { RenderPass } from "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/postprocessing/UnrealBloomPass.js";
 
-console.log("🔥 style.js loaded successfully!");
 
         window.addEventListener("DOMContentLoaded", () => {
   
