@@ -98,3 +98,8 @@ body {
     filter: hue-rotate(360deg);
   }
 }
+
+#finalMessage.show #finalText {
+  animation: glowText 3s linear infinite;
+  filter: drop-shadow(0 0 10px #ffb84d) drop-shadow(0 0 25px #ff4d6d);
+}
