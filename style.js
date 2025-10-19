@@ -23,6 +23,12 @@ const listener = new THREE.AudioListener();
 camera.add(listener);
 const soundLoader = new THREE.AudioLoader();
 const sounds = {};
+const audioContext = listener.context;
+document.addEventListener('click', () => {
+  if (audioContext.state === 'suspended') {
+    audioContext.resume();
+  }
+});
 function loadSound(key, url) {
   const s = new THREE.Audio(listener);
   soundLoader.load(url, (buf) => { s.setBuffer(buf); s.setVolume(0.8); });
@@ -108,8 +114,8 @@ overlay.onclick=e=>{if(e.target===overlay)input.focus();};
 launchBtn.onclick=()=>createFirework();
 
 function startSequence(nameRaw){
-  const name=(nameRaw||"Friend").trim();
-  if(!name)return;
+  const name = (nameRaw || "Friend").trim();
+if (name.length === 0) return;
   overlay.classList.add("hidden");
   try{listener.context.resume();}catch{}
   const clean=name.replace(/\s+/g,"");
@@ -120,6 +126,10 @@ function startSequence(nameRaw){
       const z=(Math.random()-0.5)*24; createFirework({x,z,color:colors[i%colors.length]});
     },i*baseDelay);
   }
+  window.onload = () => {
+  setTimeout(() => startSequence("Aditya"), 1000);
+};
+
   setTimeout(()=>{
     try{sounds.boom?.play();}catch{}
     finalText.textContent=`Happy Diwali, ${name}!`;
