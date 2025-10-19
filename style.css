@@ -24,14 +24,35 @@ body {
 }
 
 body {
-  background: radial-gradient(800px 400px at 18% 8%, rgba(255, 160, 60, 0.02), transparent),
-    linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 70%);
+  background: linear-gradient(270deg,
+  #ff9933,
+  #ff4da6,
+  #ffcc33,
+  #ff6600,
+  #800080
+);
   color: #f4f7fb;
   overflow: hidden;
   position: relative;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
+  animation: rainbowFlow 10s linear infinite;
+}
+
+/* Body Animation */
+@keyframes rainbowFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* canvas */
