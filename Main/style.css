@@ -1,29 +1,5 @@
-:root {
-  --bg-top: #02030a;
-  --bg-bottom: #020611;
-  --accent: #ffb84d;
-  --muted: #9aa4b2;
-  --glass: rgba(255, 255, 255, 0.04);
-  --ui-z: 9999;
-  --font-stack: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-}
-
-/* base */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0
-}
-
-html,
 body {
-  height: 100%;
-  width: 100%;
-  font-family: var(--font-stack);
-  -webkit-font-smoothing: antialiased
-}
 
-body {
   background: linear-gradient(270deg,
   #ff9933,
   #ff4da6,
@@ -55,245 +31,79 @@ body {
   }
 }
 
-/* canvas */
-canvas#fireworks {
-  display: block;
+canvas {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
-  background: transparent;
-  touch-action: manipulation;
 }
 
-/* small UI */
-#ui {
-  position: fixed;
-  z-index: var(--ui-z);
-  top: 18px;
-  left: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: flex-start;
-  padding: 10px;
-  border-radius: 10px;
-  backdrop-filter: blur(6px);
-  background: linear-gradient(180deg, rgba(6, 8, 12, 0.36), rgba(6, 8, 12, 0.24));
-  border: 1px solid rgba(255, 255, 255, 0.03);
-  min-width: 140px;
-}
-
-/* ui text */
-#ui h1 {
-  font-size: 14px;
-  margin: 0;
-  font-weight: 700
-}
-
-
-
-/* small ui2 */
-#ui2 {
-  position: fixed;
-  z-index: var(--ui-z);
-  top: 18px;
-  right: 12px;
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  align-items: flex-end;
-  padding: 15px;
-  border-radius: 10px;
-  backdrop-filter: blur(6px);
-  background: linear-gradient(180deg, rgba(6, 8, 12, 0.36), rgba(6, 8, 12, 0.24));
-  border: 1px solid rgba(255, 255, 255, 0.03);
-  min-width: 140px;
-}
-
-#ui2 ul {
-  list-style: none;
-}
-
-/* ui2 text */
-
-#ui2 li a {
-  display: inline-block;
-  margin-bottom: 2px;
-  color: white;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-#ui2 li a span {
-  margin-left: 6px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-/* ui2 text hover*/
-
-#ui2 li a:hover {
-  transform: scale(1.2);
-
-}
-
-#ui2 li a:hover span {
-  background: linear-gradient(to right, #ff4b2b, #ffcc00, #00cc99, #6633cc);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-}
-
-.helper {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 4px
-}
-
-/* buttons */
-button {
-  border: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
-  color: inherit;
-  padding: 10px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 14px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-}
-
-button.primary {
-  background: linear-gradient(90deg, #ffb84d, #ff7b2a);
-  color: #071017
-}
-
-button.secondary {
-  background: rgba(255, 255, 255, 0.04)
-}
-
-button:active {
-  transform: translateY(1px)
-}
-
-/* button color */
-#launchBtn,
-#muteBtn {
-  transition: all 0.6s ease;
-}
-
-#launchBtn:hover,
-#muteBtn:hover {
-  background: linear-gradient(90deg, #ffb84d, #ff7b2a);
-}
-
-/* don't touch name overlay and name overlay show (only for om) */
-/* name overlay (full screen) */
+/* Name Overlay */
 #nameOverlay {
   position: fixed;
   inset: 0;
-  z-index: 10000;
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.7));
-  padding: 20px;
-}
-
-#nameOverlay .card {
-  width: 100%;
-  max-width: 420px;
-  border-radius: 14px;
-  padding: 18px;
-  background: linear-gradient(180deg, rgba(6, 8, 12, 0.85), rgba(8, 10, 14, 0.75));
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  text-align: center;
+  align-items: center;
+  gap: 15px;
+  z-index: 10;
 }
 
 #nameOverlay h2 {
-  margin-bottom: 6px
-}
-
-#nameOverlay p {
-  color: var(--muted);
-  font-size: 14px;
-  margin-bottom: 12px
+  color: #ffb84d;
+  font-size: 1.6rem;
 }
 
 #nameInput {
-  width: 100%;
-  padding: 12px 14px;
-  font-size: 16px;
+  padding: 10px 18px;
   border-radius: 10px;
-  border: 0;
-  margin-bottom: 12px;
-  background: rgba(255, 255, 255, 0.02);
-  color: #fff;
-}
-
-#nameOverlay .row {
-  display: flex;
-  gap: 10px;
-  justify-content: center
-}
-
-#nameOverlay .tip {
-  display: block;
-  margin-top: 8px;
-  color: var(--muted);
-  font-size: 12px
-}
-
-/* final message */
-#finalMessage {
-  position: fixed;
-  inset: 0;
-  z-index: 10005;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-#finalText {
-  font-size: 28px;
-  font-weight: 800;
-  color: #fff;
+  border: none;
   text-align: center;
-  background: linear-gradient(90deg, #ffd17a, #ff7b2a);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 6px 30px rgba(255, 120, 35, 0.12);
-  transform: scale(0.9);
-  opacity: 0;
-  transition: transform 700ms cubic-bezier(.2, .8, .2, 1), opacity 700ms;
+  font-size: 1.1rem;
 }
 
-#finalMessage.show #finalText {
-  transform: scale(1);
-  opacity: 1
+#startBtn {
+  background: linear-gradient(90deg, #ffb84d, #ff4d6d);
+  border: none;
+  color: #000;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
-
-/* responsive tweaks for small phones */
-@media (max-width:420px) {
-  #nameOverlay .card {
-    padding: 14px
-  }
-
-  #finalText {
-    font-size: 22px
-  }
-
-  button {
-    padding: 10px 10px;
-    font-size: 15px
-  }
+#startBtn:hover {
+  transform: scale(1.05);
 }
 
 .hidden {
-  display: none !important
+  display: none;
+}
+
+/* Final Message */
+#finalMessage {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  z-index: 5;
+}
+
+#finalMessage.show {
+  opacity: 1;
+}
+
+#finalText {
+  font-size: 2.2rem;
+  background: linear-gradient(90deg, #ff4d6d, #ffb84d, #7afcff, #a6ff7a, #d69bff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 25px #ffb84d;
 }
